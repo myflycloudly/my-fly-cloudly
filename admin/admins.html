@@ -340,15 +340,6 @@
 
                 // Animate table rows after rendering
                 setTimeout(animateAdminRows, 50);
-            } catch (error) {
-                console.error('Error loading admins:', error);
-                const errorText = typeof t === 'function' ? t('admin.errorLoadingAdmins') : 'Error loading admins';
-                document.getElementById('adminsTableBody').innerHTML =
-                    `<tr><td colspan="5" class="text-center">${errorText}</td></tr>`;
-                if (typeof applyTranslations === 'function') {
-                    setTimeout(() => applyTranslations(), 100);
-                }
-            }
         }
 
         async function registerNewAdmin() {
