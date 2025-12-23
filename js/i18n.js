@@ -1,16 +1,15 @@
 // Internationalization (i18n) System
 // Applies translations to the page dynamically
 
-// Flag to prevent recursive calls
-let isApplyingTranslations = false;
+// Guard to prevent recursive calls
+let isApplying = false;
 
 /**
  * Apply translations to the current page
  */
 function applyTranslations() {
     // Prevent recursive calls
-    if (isApplyingTranslations) {
-        console.warn('applyTranslations already running, skipping recursive call');
+    if (isApplying) {
         return;
     }
     
@@ -19,8 +18,7 @@ function applyTranslations() {
         return;
     }
     
-    // Set flag to prevent recursion
-    isApplyingTranslations = true;
+    isApplying = true;
     
     try {
         const lang = getCurrentLanguage();
@@ -86,8 +84,7 @@ function applyTranslations() {
         }
     }
     } finally {
-        // Always reset flag, even if there was an error
-        isApplyingTranslations = false;
+        isApplying = false;
     }
 }
 

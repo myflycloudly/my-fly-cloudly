@@ -738,6 +738,12 @@ function getCurrentLanguage() {
 
 // Set current language
 function setCurrentLanguage(lang) {
+    // Prevent setting the same language repeatedly
+    const currentLang = getCurrentLanguage();
+    if (currentLang === lang && document.documentElement.lang === lang) {
+        return; // Already set, no need to change
+    }
+    
     localStorage.setItem('language', lang);
     document.documentElement.lang = lang;
     // Set RTL for body/content but keep navbar LTR
