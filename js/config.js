@@ -37,6 +37,7 @@ function initializeSupabase() {
             // Make supabase available globally
             if (typeof window !== 'undefined') {
                 window.supabaseClient = supabase;
+                window.supabase = supabase; // Also assign directly for compatibility
             }
             console.log('✅ Supabase initialized successfully');
             isInitializing = false;
@@ -65,6 +66,7 @@ function initializeSupabase() {
                     // Make supabase available globally
                     if (typeof window !== 'undefined') {
                         window.supabaseClient = supabase;
+                        window.supabase = supabase; // Also assign directly for compatibility
                     }
                     console.log('✅ Supabase initialized successfully (via dynamic import)');
                 }
