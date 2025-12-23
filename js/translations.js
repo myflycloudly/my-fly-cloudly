@@ -222,6 +222,14 @@ const translations = {
             errorLoadingBookings: 'Error loading bookings:',
             manageBookingsSubtitle: 'View and manage all customer bookings',
             filterByStatus: 'Filter by Status:',
+            all: 'All',
+            pending: 'Pending',
+            approved: 'Approved',
+            rejected: 'Rejected',
+            participants: 'Participants',
+            totalPrice: 'Total Price',
+            bookingDetails: 'Booking Details',
+            addMessage: 'Add Message',
             searchPlaceholder: 'Search by customer name or service...',
             loadingBookings: 'Loading bookings...',
             noBookingsFound: 'No bookings found',
@@ -743,7 +751,7 @@ function setCurrentLanguage(lang) {
     if (currentLang === lang && document.documentElement.lang === lang) {
         return; // Already set, no need to change
     }
-    
+
     localStorage.setItem('language', lang);
     document.documentElement.lang = lang;
     // Set RTL for body/content but keep navbar LTR
