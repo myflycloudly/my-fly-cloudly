@@ -110,6 +110,12 @@ function getRegularNavbar(activePage = '') {
                         </div>`;
     }).join('')}
                     ${user ? `<div class="tuxdi-nav-link logout-visible"><a class="tuxdi-link-label" href="javascript:void(0)" id="navLogout">logout</a></div>` : ''}
+                    <div class="tuxdi-nav-link">
+                        <button id="langToggleMobile" class="tuxdi-link-label lang-btn-mobile" style="background: transparent; border: none; color: white; font-size: inherit; font-family: inherit; cursor: pointer; width: 100%; text-align: left; padding: 0;">
+                            <span class="lang-icon">🌐</span>
+                            <span class="lang-text">${currentLang === 'ar' ? 'EN' : 'AR'}</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="tuxdi-nav-contacts-container">
@@ -220,6 +226,12 @@ function getAdminNavbar(activePage = '') {
                         </div>`;
     }).join('')}
                     <div class="tuxdi-nav-link logout-visible"><a class="tuxdi-link-label" href="javascript:void(0)" id="navLogout">logout</a></div>
+                    <div class="tuxdi-nav-link">
+                        <button id="langToggleMobile" class="tuxdi-link-label lang-btn-mobile" style="background: transparent; border: none; color: white; font-size: inherit; font-family: inherit; cursor: pointer; width: 100%; text-align: left; padding: 0;">
+                            <span class="lang-icon">🌐</span>
+                            <span class="lang-text">${currentLang === 'ar' ? 'EN' : 'AR'}</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="tuxdi-nav-contacts-container">

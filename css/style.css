@@ -4475,6 +4475,35 @@ body:has(.hero) .navbar:not(.scrolled) .burger-button span {
     pointer-events: auto !important;
 }
 
+/* Mobile language toggle button */
+.lang-btn-mobile {
+    display: flex !important;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    user-select: none;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+.lang-btn-mobile .lang-icon {
+    font-size: 1.5rem;
+}
+
+.lang-btn-mobile .lang-text {
+    font-size: 3rem;
+    font-weight: 300;
+    text-transform: lowercase;
+}
+
+.tuxdi-nav.active #langToggleMobile {
+    display: flex !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+}
+
 .tuxdi-nav-contacts-container {
     margin-top: auto;
     padding-bottom: 2rem;
