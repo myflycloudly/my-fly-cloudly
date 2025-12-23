@@ -1,16 +1,29 @@
 // Internationalization (i18n) System
 // Applies translations to the page dynamically
 
+// Flag to prevent recursive calls
+let isApplyingTranslations = false;
+
 /**
  * Apply translations to the current page
  */
 function applyTranslations() {
+    // Prevent recursive calls
+    if (isApplyingTranslations) {
+        console.warn('applyTranslations already running, skipping recursive call');
+        return;
+    }
+    
     if (typeof t !== 'function' || typeof getCurrentLanguage !== 'function') {
         console.warn('Translation functions not available');
         return;
     }
     
-    const lang = getCurrentLanguage();
+    // Set flag to prevent recursion
+    isApplyingTranslations = true;
+    
+    try {
+        const lang = getCurrentLanguage();
     
     // Update all elements with data-i18n attribute
     document.querySelectorAll('[data-i18n]').forEach(element => {
@@ -71,6 +84,10 @@ function applyTranslations() {
         if (langTextSpan) {
             langTextSpan.textContent = lang === 'ar' ? 'EN' : 'AR';
         }
+    }
+    } finally {
+        // Always reset flag, even if there was an error
+        isApplyingTranslations = false;
     }
 }
 
