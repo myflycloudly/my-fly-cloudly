@@ -190,6 +190,19 @@ const translations = {
             created: 'Created:',
             errorLoadingDetails: 'Error loading booking details'
         },
+        // Profile
+        profile: {
+            subtitle: 'Update your personal information',
+            personalInformation: 'Personal Information',
+            enterFullName: 'Enter your full name',
+            emailCannotChange: 'Email cannot be changed',
+            requiredForBooking: 'Required for booking verification',
+            saveChanges: 'Save Changes',
+            enterFullNameError: 'Please enter your full name',
+            selectNationalityError: 'Please select your nationality',
+            updateSuccess: 'Profile updated successfully!',
+            updateError: 'Failed to update profile. Please try again.'
+        },
         // Admin
         admin: {
             dashboard: 'Admin Dashboard',
