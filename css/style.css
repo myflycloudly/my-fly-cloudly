@@ -7,6 +7,20 @@
     box-sizing: border-box;
 }
 
+/* Prevent horizontal scrolling on mobile */
+html {
+    overflow-x: hidden;
+    max-width: 100vw;
+    position: relative;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+    touch-action: pan-y; /* Allow vertical scrolling, prevent horizontal */
+    -webkit-overflow-scrolling: touch;
+}
+
 :root {
     /* Brand Colors - MY FLY CLOUDLY TOURS */
     --primary-color: #FF6B35;
@@ -71,6 +85,9 @@ body {
     line-height: 1.6;
     color: var(--text-primary);
     background-color: var(--bg-secondary);
+    overflow-x: hidden;
+    max-width: 100vw;
+    position: relative;
 }
 
 /* Brand Typography - Headers use Playfair Display */
@@ -4297,26 +4314,6 @@ body:has(.hero) .navbar:not(.scrolled) .burger-button span {
     pointer-events: auto;
 }
 
-/* RTL Support for Mobile Menu - Slide from left in Arabic */
-[dir="rtl"] .tuxdi-nav {
-    right: auto;
-    left: 0;
-    transform: translateX(-100%);
-}
-
-[dir="rtl"] .tuxdi-nav.active {
-    transform: translateX(0);
-}
-
-/* RTL: Reverse animation direction for menu items */
-[dir="rtl"] .tuxdi-nav-link {
-    transform: translateX(-50px);
-}
-
-[dir="rtl"] .tuxdi-nav.active .tuxdi-nav-link {
-    transform: translateX(0);
-}
-
 .tuxdi-nav-inner {
     padding: 6rem 2.5rem 2.5rem 2.5rem;
     height: 100%;
@@ -4619,6 +4616,25 @@ body:has(.hero) .navbar:not(.scrolled) .burger-button span {
 }
 
 @media (max-width: 768px) {
+    /* Prevent horizontal scrolling on mobile */
+    html, body {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+        width: 100% !important;
+        position: relative;
+        touch-action: pan-y; /* Only allow vertical scrolling */
+    }
+
+    /* Ensure all containers don't exceed viewport */
+    .container,
+    section,
+    .hero,
+    .navbar,
+    .nav-content {
+        max-width: 100vw;
+        overflow-x: hidden;
+    }
+
     .burger-button {
         display: flex;
     }
@@ -4626,6 +4642,15 @@ body:has(.hero) .navbar:not(.scrolled) .burger-button span {
     /* Tuxdi menu sizing for mobile */
     .tuxdi-nav {
         max-width: 90%;
+        overflow-x: hidden;
+    }
+
+    /* Prevent body from scrolling horizontally when menu is open */
+    body:has(.tuxdi-nav.active),
+    html:has(.tuxdi-nav.active) {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100vw !important;
     }
 
     /* Remove navbar blur when Tuxdi menu is open - NO BLUR! */
