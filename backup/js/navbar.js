@@ -10,14 +10,11 @@ function getRegularNavbar(activePage = '') {
     const user = (typeof getCurrentUser === 'function') ? getCurrentUser() : null;
     const isUserAdmin = (typeof isAdmin === 'function') ? isAdmin() : false;
 
-    // Get current language
-    const currentLang = typeof getCurrentLanguage === 'function' ? getCurrentLanguage() : 'en';
-
     // Base pages (always shown)
     const basePages = [
-        { href: 'index.html', label: typeof t === 'function' ? t('nav.home') : 'Home' },
-        { href: 'services.html', label: typeof t === 'function' ? t('nav.services') : 'Services' },
-        { href: 'about.html', label: typeof t === 'function' ? t('nav.about') : 'About' }
+        { href: 'index.html', label: 'Home' },
+        { href: 'services.html', label: 'Services' },
+        { href: 'about.html', label: 'About' }
     ];
 
     // Auth pages (shown based on login status)
@@ -25,19 +22,15 @@ function getRegularNavbar(activePage = '') {
     if (user) {
         // User is logged in
         if (isUserAdmin) {
-            // Admin users see full admin navigation menu
-            authPages.push({ href: 'admin/index.html', label: typeof t === 'function' ? t('nav.admin') : 'Admin' });
-            authPages.push({ href: 'admin/bookings.html', label: typeof t === 'function' ? t('nav.bookings') : 'Bookings' });
-            authPages.push({ href: 'admin/services.html', label: typeof t === 'function' ? t('nav.services') : 'Services' });
-            authPages.push({ href: 'admin/users.html', label: typeof t === 'function' ? t('nav.users') : 'Users' });
-            authPages.push({ href: 'admin/admins.html', label: typeof t === 'function' ? t('nav.admins') : 'Admins' });
+            // Admin users see Admin link instead of Dashboard
+            authPages.push({ href: 'admin/index.html', label: 'Admin' });
         } else {
             // Regular users see Dashboard
-            authPages.push({ href: 'dashboard.html', label: typeof t === 'function' ? t('nav.dashboard') : 'Dashboard' });
+            authPages.push({ href: 'dashboard.html', label: 'Dashboard' });
         }
     } else {
         // User is not logged in
-        authPages.push({ href: 'login.html', label: typeof t === 'function' ? t('nav.login') : 'Login' });
+        authPages.push({ href: 'login.html', label: 'Login' });
     }
 
     const allPages = [...basePages, ...authPages];
@@ -58,16 +51,7 @@ function getRegularNavbar(activePage = '') {
     }).join('\n                    ');
 
     // Add logout button if user is logged in
-    const logoutButton = user ? `\n                    <li><a href="#" id="navLogout">${typeof t === 'function' ? t('nav.logout') : 'Logout'}</a></li>` : '';
-
-    // Language switcher button (using currentLang from above)
-    const langButton = `
-                    <li class="lang-switcher">
-                        <button id="langToggle" class="lang-btn" aria-label="Switch language">
-                            <span class="lang-icon">🌐</span>
-                            <span class="lang-text">${currentLang === 'ar' ? 'EN' : 'AR'}</span>
-                        </button>
-                    </li>`;
+    const logoutButton = user ? '\n                    <li><a href="#" id="navLogout">Logout</a></li>' : '';
 
     return `
     <!-- Navigation -->
@@ -75,13 +59,10 @@ function getRegularNavbar(activePage = '') {
         <div class="container">
             <div class="nav-content">
                 <div class="logo">
-                    <a href="index.html">
-                        <img src="logo.jpeg" alt="MY FLY CLOUDLY TOURS" class="logo-image" style="height: 45px; width: auto;">
-                        <span class="logo-text">MY FLY CLOUDLY TOURS</span>
-                    </a>
+                    <a href="index.html">✈️ Two Days Pilot</a>
                 </div>
                 <ul class="nav-menu">
-                    ${navItems}${logoutButton}${langButton}
+                    ${navItems}${logoutButton}
                 </ul>
                 <button class="burger-button" aria-label="Open the menu">
                     <span></span>
@@ -110,16 +91,10 @@ function getRegularNavbar(activePage = '') {
                         </div>`;
     }).join('')}
                     ${user ? `<div class="tuxdi-nav-link logout-visible"><a class="tuxdi-link-label" href="javascript:void(0)" id="navLogout">logout</a></div>` : ''}
-                    <div class="tuxdi-nav-link">
-                        <button id="langToggleMobile" class="tuxdi-link-label lang-btn-mobile" style="background: transparent; border: none; color: white; font-size: inherit; font-family: inherit; cursor: pointer; width: 100%; text-align: left; padding: 0;">
-                            <span class="lang-icon">🌐</span>
-                            <span class="lang-text">${currentLang === 'ar' ? 'EN' : 'AR'}</span>
-                        </button>
-                    </div>
                 </div>
             </div>
             <div class="tuxdi-nav-contacts-container">
-                <a href="https://wa.me/601160609261" class="tuxdi-contact-btn" target="_blank">CONTACT US</a>
+                <a href="https://wa.me/601121082839" class="tuxdi-contact-btn" target="_blank">CONTACT US</a>
                 <div class="tuxdi-nav-contacts">
                     <div class="tuxdi-nav-data-item">
                         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -135,7 +110,7 @@ function getRegularNavbar(activePage = '') {
                             <path d="M28.9 3C30.06 3 31 3.94 31 5.1V34.9C31 36.06 30.06 37 28.9 37H11.1C9.94 37 9 36.06 9 34.9V5.1C9 3.94 9.94 3 11.1 3H28.9Z" stroke="#AF2EFF" stroke-width="4.06"/>
                             <path d="M19.99 35.19C20.86 35.19 21.57 34.49 21.57 33.62C21.57 32.75 20.86 32.05 19.99 32.05C19.13 32.05 18.42 32.75 18.42 33.62C18.42 34.49 19.13 35.19 19.99 35.19Z" fill="#AF2EFF"/>
                         </svg>
-                        <a href="tel:+601160609261">+60 11-6060 9261</a>
+                        <a href="tel:+601121082839">+60 11 2108 2839</a>
                     </div>
                 </div>
                 <div class="tuxdi-nav-social-container">
@@ -162,17 +137,14 @@ function getRegularNavbar(activePage = '') {
  * Call this function to get the navigation HTML for admin pages
  */
 function getAdminNavbar(activePage = '') {
-    // Get current language
-    const currentLang = typeof getCurrentLanguage === 'function' ? getCurrentLanguage() : 'en';
-
     const pages = [
-        { href: '../index.html', label: typeof t === 'function' ? t('nav.home') : 'Home' },
-        { href: 'index.html', label: typeof t === 'function' ? t('nav.admin') : 'Admin' },
-        { href: 'bookings.html', label: typeof t === 'function' ? t('nav.bookings') : 'Bookings' },
-        { href: 'services.html', label: typeof t === 'function' ? t('nav.services') : 'Services' },
-        { href: 'slider.html', label: typeof t === 'function' ? t('nav.slider') : 'Slider' },
-        { href: 'users.html', label: typeof t === 'function' ? t('nav.users') : 'Users' },
-        { href: 'admins.html', label: typeof t === 'function' ? t('nav.admins') : 'Admins' }
+        { href: '../index.html', label: 'Home' },
+        { href: 'index.html', label: 'Admin' },
+        { href: 'bookings.html', label: 'Bookings' },
+        { href: 'services.html', label: 'Services' },
+        { href: '../about.html', label: 'About' },
+        { href: 'users.html', label: 'Users' },
+        { href: 'admins.html', label: 'Admins' }
     ];
 
     const navItems = pages.map(page => {
@@ -186,20 +158,11 @@ function getAdminNavbar(activePage = '') {
         <div class="container">
             <div class="nav-content">
                 <div class="logo">
-                    <a href="../index.html">
-                        <img src="../logo.jpeg" alt="MY FLY CLOUDLY TOURS" class="logo-image" style="height: 45px; width: auto;">
-                        <span class="logo-text">MY FLY CLOUDLY TOURS</span>
-                    </a>
+                    <a href="../index.html">✈️ Two Days Pilot</a>
                 </div>
                 <ul class="nav-menu">
                     ${navItems}
-                    <li><a href="#" id="logoutBtn">${typeof t === 'function' ? t('nav.logout') : 'Logout'}</a></li>
-                    <li class="lang-switcher">
-                        <button id="langToggle" class="lang-btn" aria-label="Switch language">
-                            <span class="lang-icon">🌐</span>
-                            <span class="lang-text">${currentLang === 'ar' ? 'EN' : 'AR'}</span>
-                        </button>
-                    </li>
+                    <li><a href="#" id="logoutBtn">Logout</a></li>
                 </ul>
                 <button class="burger-button" aria-label="Open the menu">
                     <span></span>
@@ -226,16 +189,10 @@ function getAdminNavbar(activePage = '') {
                         </div>`;
     }).join('')}
                     <div class="tuxdi-nav-link logout-visible"><a class="tuxdi-link-label" href="javascript:void(0)" id="navLogout">logout</a></div>
-                    <div class="tuxdi-nav-link">
-                        <button id="langToggleMobile" class="tuxdi-link-label lang-btn-mobile" style="background: transparent; border: none; color: white; font-size: inherit; font-family: inherit; cursor: pointer; width: 100%; text-align: left; padding: 0;">
-                            <span class="lang-icon">🌐</span>
-                            <span class="lang-text">${currentLang === 'ar' ? 'EN' : 'AR'}</span>
-                        </button>
-                    </div>
                 </div>
             </div>
             <div class="tuxdi-nav-contacts-container">
-                <a href="https://wa.me/601160609261" class="tuxdi-contact-btn" target="_blank">CONTACT US</a>
+                <a href="https://wa.me/601121082839" class="tuxdi-contact-btn" target="_blank">CONTACT US</a>
                 <div class="tuxdi-nav-contacts">
                     <div class="tuxdi-nav-data-item">
                         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -251,7 +208,7 @@ function getAdminNavbar(activePage = '') {
                             <path d="M28.9 3C30.06 3 31 3.94 31 5.1V34.9C31 36.06 30.06 37 28.9 37H11.1C9.94 37 9 36.06 9 34.9V5.1C9 3.94 9.94 3 11.1 3H28.9Z" stroke="#AF2EFF" stroke-width="4.06"/>
                             <path d="M19.99 35.19C20.86 35.19 21.57 34.49 21.57 33.62C21.57 32.75 20.86 32.05 19.99 32.05C19.13 32.05 18.42 32.75 18.42 33.62C18.42 34.49 19.13 35.19 19.99 35.19Z" fill="#AF2EFF"/>
                         </svg>
-                        <a href="tel:+601160609261">+60 11-6060 9261</a>
+                        <a href="tel:+601121082839">+60 11 2108 2839</a>
                     </div>
                 </div>
                 <div class="tuxdi-nav-social-container">
@@ -306,9 +263,6 @@ function initRegularNavbar(activePage = '') {
 
     // Initialize mobile menu after navbar is created
     initMobileMenu();
-
-    // Initialize language switcher
-    initLanguageSwitcher();
 }
 
 /**
@@ -344,66 +298,6 @@ function initAdminNavbar(activePage = '') {
 
     // Initialize mobile menu after navbar is created
     initMobileMenu();
-
-    // Initialize language switcher
-    initLanguageSwitcher();
-}
-
-/**
- * Initialize language switcher button
- */
-function initLanguageSwitcher() {
-    // Handle desktop language toggle
-    const langToggle = document.getElementById('langToggle');
-    if (langToggle) {
-        // Remove any existing listeners to prevent duplicates
-        const newLangToggle = langToggle.cloneNode(true);
-        langToggle.parentNode.replaceChild(newLangToggle, langToggle);
-
-        newLangToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            if (typeof getCurrentLanguage === 'function' && typeof setCurrentLanguage === 'function') {
-                const currentLang = getCurrentLanguage();
-                const newLang = currentLang === 'ar' ? 'en' : 'ar';
-
-                console.log('Switching language from', currentLang, 'to', newLang);
-                setCurrentLanguage(newLang);
-
-                // Reload page to apply translations
-                window.location.reload();
-            } else {
-                console.error('Language functions not available');
-            }
-        });
-    }
-
-    // Handle mobile language toggle
-    const langToggleMobile = document.getElementById('langToggleMobile');
-    if (langToggleMobile) {
-        // Remove any existing listeners to prevent duplicates
-        const newLangToggleMobile = langToggleMobile.cloneNode(true);
-        langToggleMobile.parentNode.replaceChild(newLangToggleMobile, langToggleMobile);
-
-        newLangToggleMobile.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            if (typeof getCurrentLanguage === 'function' && typeof setCurrentLanguage === 'function') {
-                const currentLang = getCurrentLanguage();
-                const newLang = currentLang === 'ar' ? 'en' : 'ar';
-
-                console.log('Switching language from', currentLang, 'to', newLang);
-                setCurrentLanguage(newLang);
-
-                // Reload page to apply translations
-                window.location.reload();
-            } else {
-                console.error('Language functions not available');
-            }
-        });
-    }
 }
 
 /**
@@ -647,10 +541,8 @@ function initMobileMenu() {
         }, 300);
 
         // Close menu when clicking outside (with small delay to avoid conflicts)
-        // Store reference for cleanup
-        let handleOutsideClick = null;
         setTimeout(() => {
-            handleOutsideClick = (e) => {
+            const handleOutsideClick = (e) => {
                 if (tuxdiNav.classList.contains('active') &&
                     !tuxdiNav.contains(e.target) &&
                     !burgerButton.contains(e.target)) {
@@ -658,13 +550,6 @@ function initMobileMenu() {
                 }
             };
             document.addEventListener('click', handleOutsideClick);
-
-            // Cleanup on page unload
-            window.addEventListener('beforeunload', () => {
-                if (handleOutsideClick) {
-                    document.removeEventListener('click', handleOutsideClick);
-                }
-            });
         }, 200);
 
         // Close menu when clicking a nav link (except logout, contact button, and external links)

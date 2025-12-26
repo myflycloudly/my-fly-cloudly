@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard - Two Days Pilot</title>
+    <link rel="stylesheet" href="css/style.css?v=4">
+</head>
+
+<body>
+    <!-- Navigation (will be replaced by navbar.js) -->
+    <nav class="navbar"></nav>
+
+    <!-- Dashboard Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h1>Welcome back, <span id="userName">User</span>!</h1>
+                <p class="section-subtitle">Manage your bookings and profile</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Content -->
+    <section class="dashboard-content">
+        <div class="container">
+            <div class="dashboard-grid">
+                <!-- Quick Actions -->
+                <div class="dashboard-card fade-in">
+                    <h2>Quick Actions</h2>
+                    <div class="quick-actions">
+                        <a href="booking.html" class="action-btn">
+                            <span class="action-icon">➕</span>
+                            <span>Book New Experience</span>
+                        </a>
+                        <a href="services.html" class="action-btn">
+                            <span class="action-icon">🛩️</span>
+                            <span>Browse Services</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Profile Card -->
+                <div class="dashboard-card fade-in">
+                    <h2>My Profile</h2>
+                    <div class="profile-info">
+                        <div class="profile-item">
+                            <span class="label">Name:</span>
+                            <span class="value" id="profileName">-</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="label">Email:</span>
+                            <span class="value" id="profileEmail">-</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="label">Phone:</span>
+                            <span class="value" id="profilePhone">-</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="label">Nationality:</span>
+                            <span class="value" id="profileNationality">-</span>
+                        </div>
+                    </div>
+                    <a href="profile.html" class="btn btn-outline btn-block"
+                        style="text-decoration: none; text-align: center;">Edit Profile</a>
+                </div>
+            </div>
+
+            <!-- Bookings Section -->
+            <div class="bookings-section">
+                <div class="section-header fade-in">
+                    <h2>My Bookings</h2>
+                    <div class="filter-tabs">
+                        <button class="tab-btn active" data-filter="all">All</button>
+                        <button class="tab-btn" data-filter="pending">Pending</button>
+                        <button class="tab-btn" data-filter="approved">Approved</button>
+                        <button class="tab-btn" data-filter="rejected">Rejected</button>
+                    </div>
+                </div>
+                <div id="bookingsList" class="bookings-list">
+                    <!-- Bookings will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Details Modal -->
+    <div id="bookingDetailsModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>Booking Details</h2>
+                <button class="modal-close" onclick="closeBookingDetailsModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="bookingDetailsContent">
+                <!-- Booking details will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeBookingDetailsModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer (will be replaced by footer.js) -->
+    <footer class="footer-modern"></footer>
+
+    <!-- GSAP Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/footer.js"></script>
+    <script src="js/bookings.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Initialize navbar and footer
+        document.addEventListener('DOMContentLoaded', () => {
+            initFooter();
+            initRegularNavbar('dashboard.html');
+            // Force navbar to be solid since there's no hero section
+            const navbar = document.querySelector('.navbar');
+            if (navbar) {
+                navbar.classList.add('scrolled');
+            }
+        });
+    </script>
+    <script>
+        // Initialize GSAP animations
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+
+                // Animate section header
+                const sectionHeader = document.querySelector('.page-header .section-header');
+                if (sectionHeader) {
+                    gsap.set(sectionHeader, { opacity: 0, y: 40 });
+                    gsap.to(sectionHeader, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        ease: 'power3.out'
+                    });
+                }
+
+                // Animate dashboard cards
+                const dashboardCards = document.querySelectorAll('.dashboard-card.fade-in');
+                if (dashboardCards.length > 0) {
+                    gsap.set(dashboardCards, {
+                        opacity: 0,
+                        y: 50,
+                        scale: 0.95
+                    });
+
+                    gsap.to(dashboardCards, {
+                        scrollTrigger: {
+                            trigger: '.dashboard-grid',
+                            start: 'top 80%',
+                            toggleActions: 'play none none none'
+                        },
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        duration: 0.8,
+                        ease: 'power3.out',
+                        stagger: 0.2
+                    });
+                }
+
+                // Animate bookings section header
+                const bookingsHeader = document.querySelector('.bookings-section .section-header');
+                if (bookingsHeader) {
+                    gsap.set(bookingsHeader, { opacity: 0, y: 40 });
+                    gsap.to(bookingsHeader, {
+                        scrollTrigger: {
+                            trigger: '.bookings-section',
+                            start: 'top 80%',
+                            toggleActions: 'play none none none'
+                        },
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        ease: 'power3.out'
+                    });
+                }
+            }
+        });
+
+        // Function to animate booking cards when they're loaded
+        function animateBookingCards() {
+            if (typeof gsap !== 'undefined') {
+                const bookingCards = document.querySelectorAll('.booking-card');
+                if (bookingCards.length > 0) {
+                    // Only animate opacity and transform, don't touch padding/margin
+                    gsap.set(bookingCards, {
+                        opacity: 0,
+                        y: 30,
+                        clearProps: 'padding,margin' // Clear any inline padding/margin
+                    });
+
+                    gsap.to(bookingCards, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.6,
+                        ease: 'power2.out',
+                        stagger: 0.1,
+                        clearProps: 'padding,margin' // Ensure padding/margin come from CSS
+                    });
+                }
+            }
+        }
+    </script>
+    <script>
+        // Wait for Supabase to load
+        setTimeout(async () => {
+            // Check authentication
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'login.html?redirect=dashboard.html';
+                return;
+            }
+
+            // Load full profile from database
+            const { data: profile, error: profileError } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', user.id)
+                .single();
+
+            // Update user info
+            document.getElementById('userName').textContent = user.full_name || user.email;
+            document.getElementById('profileName').textContent = profile?.full_name || user.full_name || '-';
+            document.getElementById('profileEmail').textContent = profile?.email || user.email || '-';
+            document.getElementById('profilePhone').textContent = profile?.phone || user.phone || '-';
+            document.getElementById('profileNationality').textContent = profile?.nationality || user.nationality || '-';
+
+            // Load user bookings
+            await loadUserBookings(user.id);
+
+            // Logout is handled by main.js updateNavigation()
+
+            // Filter tabs
+            const filterTabs = document.querySelectorAll('.tab-btn');
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    filterTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const filter = tab.dataset.filter;
+                    filterBookings(filter);
+                });
+            });
+        }, 1000);
+
+        async function loadUserBookings(userId) {
+            const { data: bookings, error } = await getUserBookings(userId);
+            const bookingsList = document.getElementById('bookingsList');
+
+            if (error) {
+                console.error('Error loading bookings:', error);
+                return;
+            }
+
+            if (!bookings || bookings.length === 0) {
+                bookingsList.innerHTML = `
+                    <div class="empty-state">
+                        <p>No bookings found. <a href="booking.html">Book your first experience!</a></p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Store bookings data for modal
+            allBookingsData = bookings || [];
+
+            bookingsList.innerHTML = bookings.map(booking => {
+                const service = booking.services || {};
+                const statusClass = getStatusBadgeClass(booking.status);
+                return `
+                    <div class="booking-card fade-in" data-status="${booking.status}">
+                        <div class="booking-header">
+                            <h3>${service.name || 'Unknown Service'}</h3>
+                            <span class="status-badge ${statusClass}">${booking.status}</span>
+                        </div>
+                        <div class="booking-details">
+                            <div class="detail-item">
+                                <span class="label">Date:</span>
+                                <span class="value">${formatDate(booking.booking_date)}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Time:</span>
+                                <span class="value">${formatTime(booking.booking_time)}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Participants:</span>
+                                <span class="value">${booking.participants}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Total Price:</span>
+                                <span class="value price">${formatCurrency(booking.total_price)}</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #e5e7eb;">
+                            <button class="btn btn-outline" onclick="viewBookingDetails('${booking.id}')" style="width: 100%;">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Force apply styles directly to booking cards
+            setTimeout(() => {
+                const cards = document.querySelectorAll('.booking-card');
+                cards.forEach(card => {
+                    card.style.padding = '1rem 1.25rem';
+                    card.style.paddingTop = '1rem';
+                    const header = card.querySelector('.booking-header');
+                    if (header) {
+                        header.style.marginTop = '0';
+                        header.style.marginBottom = '0.75rem';
+                        header.style.paddingTop = '0';
+                    }
+                    const h3 = card.querySelector('.booking-header h3');
+                    if (h3) {
+                        h3.style.margin = '0';
+                        h3.style.padding = '0';
+                        h3.style.marginTop = '0';
+                        h3.style.marginBottom = '0';
+                    }
+                });
+
+                // Then animate
+                animateBookingCards();
+            }, 100);
+        }
+
+        function filterBookings(status) {
+            const cards = document.querySelectorAll('.booking-card');
+            cards.forEach(card => {
+                if (status === 'all' || card.dataset.status === status) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        let allBookingsData = []; // Store all bookings data for modal (declared here for scope)
+
+        async function viewBookingDetails(bookingId) {
+            // Find booking in loaded data
+            let booking = allBookingsData.find(b => b.id === bookingId);
+
+            // If not found, fetch from API
+            if (!booking) {
+                const { data, error } = await getBookingById(bookingId);
+                if (error || !data) {
+                    alert('Error loading booking details');
+                    return;
+                }
+                booking = data;
+            }
+
+            displayBookingDetailsModal(booking);
+        }
+
+        function displayBookingDetailsModal(booking) {
+            const service = booking.services || {};
+            const statusClass = getStatusBadgeClass(booking.status);
+            const statusColors = {
+                'approved': { bg: '#f0f9ff', border: '#3b82f6', icon: '✓', text: 'Approved' },
+                'rejected': { bg: '#fef2f2', border: '#ef4444', icon: '✗', text: 'Rejected' },
+                'pending': { bg: '#fff7ed', border: '#f59e0b', icon: 'ℹ', text: 'Pending' }
+            };
+            const statusStyle = statusColors[booking.status] || statusColors['pending'];
+
+            const content = document.getElementById('bookingDetailsContent');
+            content.innerHTML = `
+                <div style="display: grid; gap: 1.5rem;">
+                    <!-- Booking Info -->
+                    <div>
+                        <h3 style="margin-bottom: 1rem; color: var(--text-primary); font-size: 1.25rem;">Booking Information</h3>
+                        <div style="display: grid; gap: 0.75rem;">
+                            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--gray-50); border-radius: 0.5rem;">
+                                <span style="font-weight: 600; color: var(--text-secondary);">Service:</span>
+                                <span style="color: var(--text-primary);">${service.name || 'N/A'}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--gray-50); border-radius: 0.5rem;">
+                                <span style="font-weight: 600; color: var(--text-secondary);">Date:</span>
+                                <span style="color: var(--text-primary);">${formatDate(booking.booking_date)}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--gray-50); border-radius: 0.5rem;">
+                                <span style="font-weight: 600; color: var(--text-secondary);">Time:</span>
+                                <span style="color: var(--text-primary);">${formatTime(booking.booking_time)}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--gray-50); border-radius: 0.5rem;">
+                                <span style="font-weight: 600; color: var(--text-secondary);">Participants:</span>
+                                <span style="color: var(--text-primary);">${booking.participants}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--gray-50); border-radius: 0.5rem;">
+                                <span style="font-weight: 600; color: var(--text-secondary);">Total Price:</span>
+                                <span style="color: var(--primary-color); font-weight: 700; font-size: 1.1rem;">${formatCurrency(booking.total_price)}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--gray-50); border-radius: 0.5rem;">
+                                <span style="font-weight: 600; color: var(--text-secondary);">Status:</span>
+                                <span class="status-badge ${statusClass}">${booking.status}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    ${booking.notes ? `
+                    <!-- Customer Notes -->
+                    <div>
+                        <h3 style="margin-bottom: 1rem; color: var(--text-primary); font-size: 1.25rem;">Your Notes</h3>
+                        <div style="padding: 1rem; background: var(--gray-50); border-left: 3px solid var(--gray-400); border-radius: 0.5rem; color: var(--text-primary);">
+                            ${booking.notes}
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    ${booking.admin_message ? `
+                    <!-- Admin Message -->
+                    <div>
+                        <h3 style="margin-bottom: 1rem; color: var(--text-primary); font-size: 1.25rem;">
+                            ${statusStyle.icon} Admin Message
+                        </h3>
+                        <div style="padding: 1.25rem; background: ${statusStyle.bg}; border-left: 4px solid ${statusStyle.border}; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                            <p style="margin: 0; color: var(--text-primary); line-height: 1.6; font-size: 1rem;">
+                                ${booking.admin_message}
+                            </p>
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    <!-- Booking ID -->
+                    <div style="padding-top: 1rem; border-top: 1px solid var(--gray-200);">
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">
+                            Booking ID: <code style="background: var(--gray-100); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: monospace;">${booking.id.substring(0, 8)}</code>
+                        </p>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">
+                            Created: ${formatDate(booking.created_at)}
+                        </p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('bookingDetailsModal').style.display = 'flex';
+        }
+
+        function closeBookingDetailsModal() {
+            document.getElementById('bookingDetailsModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        setTimeout(() => {
+            const modal = document.getElementById('bookingDetailsModal');
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        closeBookingDetailsModal();
+                    }
+                });
+            }
+        }, 1000);
+    </script>
+</body>
+
+</html>
