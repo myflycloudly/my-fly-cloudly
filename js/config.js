@@ -8,8 +8,8 @@
         return;
     }
     
-    const SUPABASE_URL = 'https://gzpdoqikepgtprnvexsx.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6cGRvcWlrZXBndHBybnZleHN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU4MjE3MTIsImV4cCI6MjA4MTM5NzcxMn0.LNdjeTBEqP_oV-Qtj5coZHMmwBRJoHvHD9N6BhxcHic';
+    const SUPABASE_URL = 'https://cwxusqzgjbrajzuqnunu.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3eHVzcXpnamJyYWp6dXFudW51Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMzIzNzcsImV4cCI6MjA4NzYwODM3N30.8evhfAcblZh_nlVxacjsiljV3lTqryxXJg94alZoAmk';
 
     // Use different variable name to avoid conflict with Supabase library's window.supabase
     let supabaseClientInstance = null;
@@ -44,7 +44,6 @@
                         detectSessionInUrl: true
                     }
                 });
-                console.log('✅ Supabase initialized successfully');
                 isInitializing = false;
                 return supabaseClientInstance;
             } catch (error) {
@@ -67,7 +66,6 @@
                                 detectSessionInUrl: true
                             }
                         });
-                        console.log('✅ Supabase initialized successfully (via dynamic import)');
                     }
                 } catch (error) {
                     console.warn('⚠️ Dynamic import fallback failed, but script tag should work');

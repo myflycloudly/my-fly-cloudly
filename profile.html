@@ -53,23 +53,6 @@
                         <label for="nationality" data-i18n="auth.nationality">Nationality *</label>
                         <select id="nationality" name="nationality" required>
                             <option value="" data-i18n="auth.selectNationality">Select your nationality</option>
-                            <option value="Malaysian">Malaysian</option>
-                            <option value="Singaporean">Singaporean</option>
-                            <option value="Indonesian">Indonesian</option>
-                            <option value="Thai">Thai</option>
-                            <option value="Filipino">Filipino</option>
-                            <option value="Vietnamese">Vietnamese</option>
-                            <option value="Chinese">Chinese</option>
-                            <option value="Indian">Indian</option>
-                            <option value="British">British</option>
-                            <option value="American">American</option>
-                            <option value="Australian">Australian</option>
-                            <option value="Canadian">Canadian</option>
-                            <option value="German">German</option>
-                            <option value="French">French</option>
-                            <option value="Japanese">Japanese</option>
-                            <option value="South Korean">South Korean</option>
-                            <option value="Other">Other</option>
                         </select>
                         <small class="form-help" data-i18n="profile.requiredForBooking">Required for booking verification</small>
                     </div>
@@ -96,6 +79,7 @@
 
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
+    <script src="js/nationalities.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/translations.js"></script>
     <script src="js/i18n.js"></script>
@@ -108,6 +92,7 @@
             initRegularNavbar('profile.html');
             initFooter();
             applyTranslations(); // Apply translations after content is loaded
+            if (typeof populateNationalitySelect === 'function') populateNationalitySelect('nationality');
             // Force navbar to be solid
             const navbar = document.querySelector('.navbar');
             if (navbar) {

@@ -187,6 +187,38 @@ function getUrlParameter(name) {
     return urlParams.get(name);
 }
 
+/** Allowed redirect targets after login (no external or path traversal) */
+var ALLOWED_REDIRECT_PATHS = [
+    'dashboard.html', 'profile.html', 'booking.html', 'index.html',
+    'admin/index.html', 'admin/bookings.html', 'admin/services.html', 'admin/users.html', 'admin/admins.html', 'admin/slider.html'
+];
+
+/**
+ * Validate redirect URL from query string. Returns an allowed path or null.
+ * Prevents open redirect (e.g. ?redirect=https://evil.com).
+ */
+function getSafeRedirectUrl(redirectParam) {
+    if (!redirectParam || typeof redirectParam !== 'string') return null;
+    var s = redirectParam.trim().toLowerCase();
+    if (s.indexOf('//') !== -1 || s.indexOf(':') !== -1 || s.indexOf('..') !== -1 || s.charAt(0) === '/') return null;
+    var base = s.split('?')[0];
+    var idx = ALLOWED_REDIRECT_PATHS.indexOf(base);
+    if (idx !== -1) return ALLOWED_REDIRECT_PATHS[idx];
+    return null;
+}
+
+/**
+ * Return a safe, generic message for users (never expose stack traces or internal errors).
+ */
+function getSafeErrorMessage(error, context) {
+    context = context || 'generic';
+    if (context === 'auth') return 'Invalid email or password. Please try again.';
+    if (context === 'reset') return 'Failed to send reset link. Please try again later.';
+    if (context === 'profile') return 'Failed to update. Please try again.';
+    if (context === 'booking') return 'Failed to save booking. Please try again.';
+    return 'An error occurred. Please try again.';
+}
+
 /**
  * Debounce function
  */

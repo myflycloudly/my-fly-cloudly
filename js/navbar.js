@@ -368,13 +368,10 @@ function initLanguageSwitcher() {
                 const currentLang = getCurrentLanguage();
                 const newLang = currentLang === 'ar' ? 'en' : 'ar';
 
-                console.log('Switching language from', currentLang, 'to', newLang);
                 setCurrentLanguage(newLang);
 
                 // Reload page to apply translations
                 window.location.reload();
-            } else {
-                console.error('Language functions not available');
             }
         });
     }
@@ -394,13 +391,10 @@ function initLanguageSwitcher() {
                 const currentLang = getCurrentLanguage();
                 const newLang = currentLang === 'ar' ? 'en' : 'ar';
 
-                console.log('Switching language from', currentLang, 'to', newLang);
                 setCurrentLanguage(newLang);
 
                 // Reload page to apply translations
                 window.location.reload();
-            } else {
-                console.error('Language functions not available');
             }
         });
     }
@@ -418,7 +412,6 @@ function initMobileMenu() {
         const navbar = document.querySelector('.navbar');
 
         if (!burgerButton || !tuxdiNav) {
-            console.warn('Tuxdi menu elements not found');
             return;
         }
 
@@ -509,60 +502,34 @@ function initMobileMenu() {
         // Use longer delay to ensure DOM is fully loaded
         setTimeout(() => {
             const navLogout = document.getElementById('navLogout');
-            console.log('Looking for navLogout element:', navLogout); // Debug
 
             if (navLogout) {
-                console.log('navLogout found, adding click listener'); // Debug
-
-                // Force href to prevent navigation
                 navLogout.setAttribute('href', 'javascript:void(0)');
 
-                // Remove any existing listeners by cloning
                 const newLogout = navLogout.cloneNode(true);
                 navLogout.parentNode.replaceChild(newLogout, navLogout);
 
-                // Test with a simple click first
                 newLogout.onclick = function (e) {
-                    console.log('onclick fired!'); // Debug
+                    e.preventDefault();
                 };
 
-                // Add click listener with multiple event phases
                 const handleLogout = async function (e) {
-                    console.log('handleLogout called, event:', e.type); // Debug
-
                     e.preventDefault();
                     e.stopPropagation();
                     e.stopImmediatePropagation();
 
-                    console.log('Logout clicked!'); // Debug
-
                     try {
-                        // Use the signOut function from auth.js
                         if (typeof signOut === 'function') {
-                            console.log('Calling signOut()'); // Debug
-                            const result = await signOut();
-                            if (result && result.error) {
-                                console.error('SignOut error:', result.error);
-                            }
+                            await signOut();
                         } else {
-                            console.warn('signOut function not found, clearing storage manually');
-                            // Fallback: clear storage manually
                             localStorage.removeItem('user');
                             sessionStorage.clear();
                         }
-
-                        // Close menu
                         closeMenu();
-
-                        // Redirect to home after logout attempt
-                        console.log('Redirecting to index.html'); // Debug
                         setTimeout(() => {
                             window.location.href = 'index.html';
                         }, 100);
-
                     } catch (error) {
-                        console.error('Logout error:', error);
-                        // Force logout anyway - clear storage and redirect
                         localStorage.removeItem('user');
                         sessionStorage.clear();
                         closeMenu();
@@ -572,34 +539,10 @@ function initMobileMenu() {
                     }
                 };
 
-                // Add listeners for both capture and bubble phases
                 newLogout.addEventListener('click', handleLogout, true);
                 newLogout.addEventListener('click', handleLogout, false);
 
-                // Also add mousedown as backup
-                newLogout.addEventListener('mousedown', function (e) {
-                    console.log('mousedown on logout'); // Debug
-                });
-
-                // Add touchstart for mobile
-                newLogout.addEventListener('touchstart', function (e) {
-                    console.log('touchstart on logout'); // Debug
-                });
-
-                console.log('Logout listener attached successfully'); // Debug
-                console.log('Logout element:', newLogout); // Debug
-                console.log('Logout computed style pointer-events:', window.getComputedStyle(newLogout).pointerEvents); // Debug
-                console.log('Logout z-index:', window.getComputedStyle(newLogout).zIndex); // Debug
-                console.log('Logout parent z-index:', window.getComputedStyle(newLogout.parentElement).zIndex); // Debug
-
-                // Test if element is actually clickable by checking what's on top
-                const rect = newLogout.getBoundingClientRect();
-                const elementsAtPoint = document.elementsFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
-                console.log('Elements at logout position:', elementsAtPoint.map(el => el.tagName + (el.id ? '#' + el.id : '') + (el.className ? '.' + el.className.split(' ').join('.') : ''))); // Debug
-
-                // EVENT DELEGATION - Listen on menu container, not the link itself
                 tuxdiNav.addEventListener('click', async function (e) {
-                    // Check if clicked element is logout or inside logout
                     const clickedEl = e.target;
                     const isLogout = clickedEl.id === 'navLogout' ||
                         clickedEl.closest('#navLogout') ||
@@ -608,41 +551,25 @@ function initMobileMenu() {
                     if (isLogout) {
                         e.preventDefault();
                         e.stopPropagation();
-                        console.log('✅ LOGOUT CLICKED via delegation!', clickedEl);
-
-                        // Close menu immediately
                         closeMenu();
 
-                        // Determine correct redirect path (admin pages need '../index.html')
                         const isAdminPage = window.location.pathname.includes('/admin/');
                         const redirectPath = isAdminPage ? '../index.html' : 'index.html';
 
                         try {
-                            // Logout from Supabase
                             if (typeof signOut === 'function') {
                                 await signOut();
                             }
-
-                            // Clear all storage
                             localStorage.clear();
                             sessionStorage.clear();
-
-                            // Force redirect immediately
-                            console.log('Redirecting to:', redirectPath);
-                            window.location.replace(redirectPath); // Use replace() to prevent back button
+                            window.location.replace(redirectPath);
                         } catch (err) {
-                            console.error('Logout error:', err);
-                            // Force logout anyway
                             localStorage.clear();
                             sessionStorage.clear();
                             window.location.replace(redirectPath);
                         }
                     }
-                }, true); // Use capture phase
-
-                console.log('✅ Event delegation handler attached to menu container');
-            } else {
-                console.warn('navLogout element not found in DOM');
+                }, true);
             }
         }, 300);
 
@@ -670,18 +597,12 @@ function initMobileMenu() {
         // Close menu when clicking a nav link (except logout, contact button, and external links)
         setTimeout(() => {
             const navLinks = tuxdiNav.querySelectorAll('.tuxdi-nav-link a');
-            console.log('Found nav links:', navLinks.length); // Debug
 
             navLinks.forEach(link => {
-                // Skip logout link - it has its own handler
                 if (link.id === 'navLogout') {
-                    console.log('Skipping logout link in nav links loop'); // Debug
                     return;
                 }
-
                 link.addEventListener('click', (e) => {
-                    console.log('Nav link clicked:', link.textContent); // Debug
-                    // Only close menu for internal navigation links
                     if (!link.hasAttribute('target')) {
                         closeMenu();
                     }

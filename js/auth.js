@@ -320,6 +320,48 @@ async function signIn(email, password) {
 }
 
 /**
+ * Request password reset email (forgot password)
+ * @param {string} email - User email
+ * @param {string} [redirectTo] - Optional absolute URL for the reset link (e.g. https://yoursite.com/reset-password.html). If not set, uses current origin + /reset-password.html
+ * @returns {Promise<{ data: object | null, error: Error | null }>}
+ */
+async function requestPasswordReset(email, redirectTo) {
+    try {
+        const supabase = typeof window !== 'undefined' ? (window.supabaseClient || window.supabase) : null;
+        if (!supabase || !supabase.auth) {
+            throw new Error('Supabase not initialized');
+        }
+        // Only use http(s) URLs — never file:// (causes 500 from Supabase)
+        const origin = typeof window !== 'undefined' && window.location && window.location.origin ? window.location.origin : '';
+        const to = (redirectTo && redirectTo.startsWith('http')) ? redirectTo : (origin.startsWith('http') ? origin + '/reset-password.html' : '');
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email.toLowerCase().trim(), to ? { redirectTo: to } : undefined);
+        if (error) throw error;
+        return { data, error: null };
+    } catch (error) {
+        return { data: null, error };
+    }
+}
+
+/**
+ * Update password (from reset-password page after user clicks email link)
+ * @param {string} newPassword - New password
+ * @returns {Promise<{ data: object | null, error: Error | null }>}
+ */
+async function updatePassword(newPassword) {
+    try {
+        const supabase = typeof window !== 'undefined' ? (window.supabaseClient || window.supabase) : null;
+        if (!supabase || !supabase.auth) {
+            throw new Error('Supabase not initialized');
+        }
+        const { data, error } = await supabase.auth.updateUser({ password: newPassword });
+        if (error) throw error;
+        return { data, error: null };
+    } catch (error) {
+        return { data: null, error };
+    }
+}
+
+/**
  * Resend email confirmation
  */
 async function resendConfirmationEmail(email) {

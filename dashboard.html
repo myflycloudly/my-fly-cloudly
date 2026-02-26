@@ -332,11 +332,13 @@
             bookingsList.innerHTML = bookings.map(booking => {
                 const service = booking.services || {};
                 const statusClass = getStatusBadgeClass(booking.status);
+                const safeServiceName = typeof escapeHTML === 'function' ? escapeHTML(service.name || 'Unknown Service') : (service.name || 'Unknown Service');
+                const safeStatus = typeof escapeHTML === 'function' ? escapeHTML(booking.status || 'pending') : (booking.status || 'pending');
                 return `
-                    <div class="booking-card fade-in" data-status="${booking.status}">
+                    <div class="booking-card fade-in" data-status="${safeStatus}">
                         <div class="booking-header">
-                            <h3>${service.name || 'Unknown Service'}</h3>
-                            <span class="status-badge ${statusClass}">${booking.status}</span>
+                            <h3>${safeServiceName}</h3>
+                            <span class="status-badge ${statusClass}">${safeStatus}</span>
                         </div>
                         <div class="booking-details">
                             <div class="detail-item">
@@ -449,6 +451,10 @@
             const bookingIdLabel = typeof t === 'function' ? t('dashboard.bookingId') : 'Booking ID:';
             const createdLabel = typeof t === 'function' ? t('dashboard.created') : 'Created:';
             
+            const safeServiceName = typeof escapeHTML === 'function' ? escapeHTML(service.name || 'N/A') : (service.name || 'N/A');
+            const safeStatus = typeof escapeHTML === 'function' ? escapeHTML(booking.status || 'pending') : (booking.status || 'pending');
+            const safeNotes = booking.notes && typeof escapeHTML === 'function' ? escapeHTML(booking.notes) : (booking.notes || '');
+            const safeAdminMsg = booking.admin_message && typeof escapeHTML === 'function' ? escapeHTML(booking.admin_message) : (booking.admin_message || '');
             const content = document.getElementById('bookingDetailsContent');
             content.innerHTML = `
                 <div style="display: grid; gap: 1.5rem;">
@@ -458,7 +464,7 @@
                         <div style="display: grid; gap: 0.75rem;">
                             <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--gray-50); border-radius: 0.5rem;">
                                 <span style="font-weight: 600; color: var(--text-secondary);">${serviceLabel}</span>
-                                <span style="color: var(--text-primary);">${service.name || 'N/A'}</span>
+                                <span style="color: var(--text-primary);">${safeServiceName}</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--gray-50); border-radius: 0.5rem;">
                                 <span style="font-weight: 600; color: var(--text-secondary);">${dateLabel}</span>
@@ -478,22 +484,22 @@
                             </div>
                             <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--gray-50); border-radius: 0.5rem;">
                                 <span style="font-weight: 600; color: var(--text-secondary);">${statusLabel}</span>
-                                <span class="status-badge ${statusClass}">${booking.status}</span>
+                                <span class="status-badge ${statusClass}">${safeStatus}</span>
                             </div>
                         </div>
                     </div>
 
-                    ${booking.notes ? `
+                    ${safeNotes ? `
                     <!-- Customer Notes -->
                     <div>
                         <h3 style="margin-bottom: 1rem; color: var(--text-primary); font-size: 1.25rem;">${yourNotesLabel}</h3>
                         <div style="padding: 1rem; background: var(--gray-50); border-left: 3px solid var(--gray-400); border-radius: 0.5rem; color: var(--text-primary);">
-                            ${booking.notes}
+                            ${safeNotes}
                         </div>
                     </div>
                     ` : ''}
 
-                    ${booking.admin_message ? `
+                    ${safeAdminMsg ? `
                     <!-- Admin Message -->
                     <div>
                         <h3 style="margin-bottom: 1rem; color: var(--text-primary); font-size: 1.25rem;">
@@ -501,7 +507,7 @@
                         </h3>
                         <div style="padding: 1.25rem; background: ${statusStyle.bg}; border-left: 4px solid ${statusStyle.border}; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                             <p style="margin: 0; color: var(--text-primary); line-height: 1.6; font-size: 1rem;">
-                                ${booking.admin_message}
+                                ${safeAdminMsg}
                             </p>
                         </div>
                     </div>

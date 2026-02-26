@@ -307,21 +307,26 @@
                 const service = booking.services || {};
                 const profile = booking.profiles || {};
                 const statusClass = getStatusBadgeClass(booking.status);
+                // Escape user-controlled data to prevent XSS
+                const safeName = typeof escapeHTML === 'function' ? escapeHTML(profile.full_name || profile.email || 'N/A') : (profile.full_name || profile.email || 'N/A');
+                const safeEmail = profile.email && typeof escapeHTML === 'function' ? escapeHTML(profile.email) : (profile.email || '');
+                const safeServiceName = typeof escapeHTML === 'function' ? escapeHTML(service.name || 'N/A') : (service.name || 'N/A');
+                const safeStatus = typeof escapeHTML === 'function' ? escapeHTML(booking.status || 'pending') : (booking.status || 'pending');
 
                 return `
                     <tr class="booking-row">
                         <td>
                             <div class="customer-cell">
-                                <strong>${profile.full_name || profile.email || 'N/A'}</strong>
-                                ${profile.email ? `<span class="customer-email">${profile.email}</span>` : ''}
+                                <strong>${safeName}</strong>
+                                ${safeEmail ? `<span class="customer-email">${safeEmail}</span>` : ''}
                             </div>
                         </td>
-                        <td>${service.name || 'N/A'}</td>
+                        <td>${safeServiceName}</td>
                         <td>${booking.booking_date ? formatDate(booking.booking_date) : 'N/A'}</td>
                         <td>${booking.booking_time ? formatTime(booking.booking_time) : 'N/A'}</td>
                         <td>${booking.participants || 0}</td>
                         <td><strong>${booking.total_price ? formatCurrency(booking.total_price) : 'RM 0'}</strong></td>
-                        <td><span class="status-badge ${statusClass}">${booking.status || 'pending'}</span></td>
+                        <td><span class="status-badge ${statusClass}">${safeStatus}</span></td>
                         <td>
                             <div class="actions-cell">
                                 <button class="action-btn view-btn" onclick="viewBookingDetails('${booking.id}')" title="${typeof t === 'function' ? t('admin.viewDetails') : 'View Details'}">

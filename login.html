@@ -255,30 +255,26 @@
                             }
                         }, 100);
                     } else {
-                        showError(errorDiv, error.message || 'Invalid email or password. Please try again.');
+                        showError(errorDiv, (typeof getSafeErrorMessage === 'function' ? getSafeErrorMessage(error, 'auth') : null) || 'Invalid email or password. Please try again.');
                     }
                     return;
                 }
 
                 if (data) {
-                    console.log('Login successful, user data:', data); // Debug
-
-                    // Check if user is admin - redirect to admin dashboard (case-insensitive check)
                     const userRole = (data.role || '').toLowerCase();
                     if (userRole === 'admin') {
-                        console.log('Admin detected, redirecting to admin dashboard');
                         window.location.href = 'admin/index.html';
                         return;
                     }
 
-                    // Get redirect URL if exists
-                    const redirectUrl = getUrlParameter('redirect');
+                    const redirectParam = getUrlParameter('redirect');
                     const serviceParam = getUrlParameter('service');
 
-                    if (redirectUrl === 'booking' && serviceParam) {
+                    if (redirectParam === 'booking' && serviceParam) {
                         window.location.href = `booking.html?service=${serviceParam}`;
-                    } else if (redirectUrl) {
-                        window.location.href = redirectUrl;
+                    } else if (typeof getSafeRedirectUrl === 'function') {
+                        const safeUrl = getSafeRedirectUrl(redirectParam);
+                        window.location.href = safeUrl || 'dashboard.html';
                     } else {
                         window.location.href = 'dashboard.html';
                     }

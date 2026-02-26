@@ -42,3 +42,7 @@ build/
 # Config files with sensitive data (if any)
 # config.js (uncomment if contains secrets)
 
+# Exclude from repo (docs and markdown kept local only)
+*.md
+docs/
+

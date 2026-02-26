@@ -195,21 +195,15 @@
 
         // Make function globally accessible
         window.handleBookNow = function (serviceId) {
-            console.log('handleBookNow called with serviceId:', serviceId); // Debug
-
             if (!serviceId) {
-                console.error('No service ID provided');
                 alert('Error: Service ID is missing. Please try again.');
                 return;
             }
 
-            // Check if user is logged in
             const user = getCurrentUser();
             if (user) {
-                console.log('User logged in, redirecting to booking with service:', serviceId);
                 window.location.href = `booking.html?service=${serviceId}`;
             } else {
-                console.log('User not logged in, redirecting to login with service:', serviceId);
                 window.location.href = `login.html?redirect=booking&service=${serviceId}`;
             }
         };
