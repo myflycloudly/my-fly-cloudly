@@ -347,7 +347,7 @@
                                 ${isCurrentUser
                         ? `<span style="color: var(--text-secondary); font-size: 0.875rem;" data-i18n="admin.currentUser">${typeof t === 'function' ? t('admin.currentUser') : 'Current User'}</span>`
                         : `<button class="action-btn-icon delete-btn" 
-                                           onclick="deleteUser('${profile.id}', ${JSON.stringify(profile.full_name || 'this user')})"
+                                           onclick="deleteUser('${profile.id}')"
                                            title="${typeof t === 'function' ? t('admin.deleteUser') : 'Delete User'}">
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <polyline points="3 6 5 6 21 6"></polyline>
@@ -407,10 +407,19 @@
             }
         }
 
-        async function deleteUser(userId, userName) {
-            const confirmMsg = typeof t === 'function' 
+        async function deleteUser(userId) {
+            const supabase = typeof window !== 'undefined' ? (window.supabaseClient || window.supabase) : null;
+            if (!supabase || !supabase.from) {
+                alert('Database not available. Please refresh the page.');
+                return;
+            }
+
+            const profile = (typeof allUsers !== 'undefined' && allUsers) ? allUsers.find(function(p) { return p.id === userId; }) : null;
+            const userName = profile ? (profile.full_name || profile.email || 'this user') : 'this user';
+
+            const confirmMsg = typeof t === 'function'
                 ? t('admin.confirmDeleteUser').replace('{name}', userName)
-                : `Are you sure you want to delete ${userName}? This will remove their profile from the database. This action cannot be undone.\n\nNote: The user account will still exist in Authentication. To fully delete, go to Supabase Dashboard → Authentication → Users.`;
+                : 'Are you sure you want to delete ' + userName + '? This will remove their profile from the database. This action cannot be undone.\n\nNote: The user account will still exist in Authentication. To fully delete, go to Supabase Dashboard → Authentication → Users.';
             if (!confirm(confirmMsg)) {
                 return;
             }
@@ -418,7 +427,7 @@
             try {
                 console.log('Deleting user profile:', userId);
 
-                // Delete from profiles table
+                // Delete from profiles table (requires RLS policy "Admins can delete profiles")
                 // Note: We can only delete from profiles table, not from auth.users
                 // The user account will still exist in auth.users but won't have a profile
                 // To fully delete, you'd need to use Supabase Admin API or Dashboard

@@ -373,7 +373,8 @@ const translations = {
             noProfileFound: 'No profile found to update. The user may not exist.',
             adminAccessRemoved: 'Admin access removed successfully. {name} is now a regular user.',
             name: 'Name',
-            role: 'Role'
+            role: 'Role',
+            created: 'Created'
         },
         // Footer
         footer: {
@@ -757,7 +758,8 @@ const translations = {
             noProfileFound: 'لم يتم العثور على ملف شخصي للتحديث. قد لا يكون المستخدم موجوداً.',
             adminAccessRemoved: 'تمت إزالة وصول الإدارة بنجاح. {name} هو الآن مستخدم عادي.',
             name: 'الاسم',
-            role: 'الدور'
+            role: 'الدور',
+            created: 'تاريخ الإنشاء'
         },
         // Footer
         footer: {
